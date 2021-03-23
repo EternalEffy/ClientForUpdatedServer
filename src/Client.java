@@ -25,7 +25,7 @@ public class Client {
 
     public void loadClient(int port){
         try {
-            client = new Socket("localhost", port);
+            client = new Socket("37.77.106.12", port);//
             inStream= new DataInputStream(client.getInputStream());
             outStream=new DataOutputStream(client.getOutputStream());
 
@@ -51,6 +51,8 @@ public class Client {
                 break;
             case  Requests.remove:
                 remove(request,index);
+            case  Requests.stop:
+                stop(request,index);
             default:
                 try {
                     outStream.writeUTF(request);
@@ -116,6 +118,18 @@ public class Client {
             System.out.println(inStream.readUTF());
         } catch (IOException e) {
             System.out.println(ClientMessages.MESSAGE_REMOVE_ERROR);
+        }
+    }
+
+    private void stop(String request,String index){
+        try {
+            System.out.println(ClientMessages.MESSAGE_STOP_SERVER);
+            outStream.writeUTF(request);
+            outStream.flush();
+            outStream.writeUTF(index);
+            outStream.flush();
+        } catch (IOException e) {
+            System.out.println(ClientMessages.MESSAGE_ERROR);
         }
 
     }
